@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const ibmiPlexSerif  = IBM_Plex_Serif({
-  subsets: ["latin"],
- weight: ["400", "700"],
- variable: "--font-ibm-plex-serif"
-});
-
-
-export const metadata: Metadata = {
-  title: "Horizon",
-  description: "Horizon is a modern banking app for everyone",
-  icons: "/icons/logo.svg"
-};
+import Sidebar from "../../components/Sidebar";
+import Image from "next/image";
+import MobileNav from "../../components/MobileNav";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const loggedIn = { firstName: "Mohammed", lastName: "ALI" };
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${ibmiPlexSerif.variable}`}>{children}</body>
-    </html>
+    <main className="flex h-screen w-full font-inter">
+      <Sidebar user={loggedIn} />
+      <div className="flex size-full flex-col">
+        <div className="root-layout">
+        <Image
+        src='/icons/logo.svg'
+        width={30}
+        height={30}
+        alt="menu icon"
+        />
+        <div>
+        <MobileNav user={loggedIn}/>
+        </div>
+        </div>
+      {children}
+      </div>
+      
+    </main>
   );
 }
