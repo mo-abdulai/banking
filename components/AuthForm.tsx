@@ -22,6 +22,7 @@ import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/actions/user.action";
+import PlaidLink from "./PlaidLink";
 
 const AuthForm = ({ type }: { type: String }) => {
   const router = useRouter();
@@ -44,9 +45,23 @@ const AuthForm = ({ type }: { type: String }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
+
       if (type === "sign-up") {
         // Call your sign in API here.
-        const newUser = await signUp(data);
+        const userData = {
+            firstName: data.firstName!,
+            lastName: data.lastName!,
+            address1: data.address1!,
+            city: data.city!,
+            state: data.state!,
+            postalCode: data.postalCode!,
+            dateOfBirth: data.dateOfBirth!,
+            ssn: data.ssn!,
+            email: data.email,
+            password: data.password
+          }
+
+        const newUser = await signUp(userData);
         setUser(newUser);
       
       } else if (type === "sign-in") {
@@ -87,8 +102,11 @@ const AuthForm = ({ type }: { type: String }) => {
         </div>
       </div>
       {user ? (
-        <div className="flex flex-col gap-4">{/* {PlaidLink} */}</div>
-      ) : (
+        <div className="flex flex-col gap-4">
+        <PlaidLink user={user} variant="primary"/>
+        
+        </div>
+     ) : ( 
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -129,7 +147,7 @@ const AuthForm = ({ type }: { type: String }) => {
                     />
                     <CustomInput
                       control={form.control}
-                      name="zipCode"
+                      name="postalCode"
                       label="Zip"
                       placeholder="Example: 1221"
                     />
@@ -195,7 +213,7 @@ const AuthForm = ({ type }: { type: String }) => {
             </Link>
           </footer>
         </>
-      )}
+     )} 
     </section>
   );
 };
