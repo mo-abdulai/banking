@@ -4,6 +4,7 @@
 import { ID, Query } from "node-appwrite";
 import { createAdminClient } from "../appwrite";
 import { parseStringify } from "../utils";
+import { channel } from "diagnostics_channel";
 
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
@@ -11,6 +12,7 @@ const {
 } = process.env;
 
 export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdProps) => {
+  
   try {
     // console.log("the bank id is ", bankId)
     const { database } = await createAdminClient();
@@ -19,13 +21,13 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
     const senderTransactions = await database.listDocuments(
       DATABASE_ID!,
       TRANSACTION_COLLECTION_ID!,
-      // [Query.equal('senderBankId', bankId)],
+      [Query.equal('senderBankId', bankId)],
     )
 
     const receiverTransactions = await database.listDocuments(
       DATABASE_ID!,
       TRANSACTION_COLLECTION_ID!,
-      // [Query.equal('receiverBankId', bankId)],
+      [Query.equal('receiverBankId', bankId)],
     );
 
     const transactions = {
@@ -39,5 +41,27 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
     return parseStringify(transactions);
   } catch (error) {
     console.log("Error getting transaction", error);
+  }
+}
+
+export const createTransaction = async (transaction: CreateTransactionProps) => {
+  console.log(transaction)
+  try {
+    const { database } = await createAdminClient();
+
+    const newTransaction = await database.createDocument(
+      DATABASE_ID!,
+      TRANSACTION_COLLECTION_ID!,
+      ID.unique(),
+      {
+        channel: 'online',
+        category: 'Transfer',
+        ...transaction
+      },
+    );
+
+    return parseStringify(newTransaction);
+  } catch (error) {
+    console.log("Error creating transaction", error);
   }
 }

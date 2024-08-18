@@ -3,9 +3,12 @@ import Link from "next/link";
 import React from "react";
 import BankCard from "../components/BankCard";
 import { getLoggedInUser } from "@/lib/actions/user.action";
+import { countTransactionCategories } from "@/lib/utils";
+import Category from "./Category";
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
-  
+  const categories: Category[] = countTransactionCategories(transactions);
+
   return (
     <aside className="right-sidebar">
       <section className="flex flex-col pb-8">
@@ -60,6 +63,15 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
             )}
           </div>
         )}
+        <section className="mt-10 flex flex-1 flex-col gap-6">
+          <h2 className="header-2">Top Category</h2>
+
+          <div className=" space-y-4">
+            {categories.map((category, index) => (
+              <Category key={category.name} category={category} />
+            ))}
+          </div>
+        </section>
       </section>
     </aside>
   );
