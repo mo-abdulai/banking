@@ -17,19 +17,19 @@ const transactionHistory = async ({
 
   if (!accounts) return;
 
-  const accountsData = accounts.data;
+  const accountsData = accounts?.data;
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId });
 
 
   const rowsPerPage = 10;
-  const totalPage = Math.ceil(account.transactions.length / rowsPerPage);
+  const totalPage = Math.ceil(account?.transactions.length / rowsPerPage);
 
   const indexOfLastTransaction = currentPage * rowsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
 
-  const currentTransactions = account.transactions.slice(
+  const currentTransactions = account?.transactions.slice(
     indexOfFirstTransaction,
     indexOfLastTransaction
   );

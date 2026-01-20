@@ -8,14 +8,13 @@ import BankCard from "@/components/BankCard";
 const myBanks = async () => {
   const loggedIn = await getLoggedInUser();
   // const currentPage = Number(page as string) || 1;
-
-  const accounts = await getAccounts({ userId: loggedIn.$id });
+  const accounts = await getAccounts({ userId: loggedIn?.$id });
 
   if (!accounts) return;
 
   const accountsData = accounts.data;
   // const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
-
+  console.log("Account is", accountsData)
   // const account = await getAccount({ appwriteItemId });
   return (
     <section className="flex">

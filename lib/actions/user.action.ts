@@ -260,6 +260,8 @@ export const getBanks = async ({ userId }: getBanksProps) => {
       ); 
     return parseStringify(banks.documents)
 
+    // console.log(banks.documents[0])
+
   } catch (error) {
     console.error("An error occurred while getting the banks:", error);
   }
